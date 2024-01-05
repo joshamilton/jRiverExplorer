@@ -30,3 +30,6 @@ This repo contains code and usage instructions for an R Shiny app designed to ex
     ├── app.R         # R Shiny app
     ├── renv.lock     # snapshot of the R environment
     ├── R             # folder with R functions invoked by app
+
+*** 
+
