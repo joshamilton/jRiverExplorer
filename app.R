@@ -4,6 +4,7 @@
 ### Email: joshamilton@gmail.com
 ################################################################################
 
+library(DT)
 library(shiny)
 source('R/functions.R')
 
@@ -46,7 +47,7 @@ ui = fluidPage(
       # Main panel
       mainPanel(
         # Output: dataframe generated from XML file
-        tableOutput(outputId = 'dataframe')
+        DT::dataTableOutput(outputId = 'dataframe')
       ),
     ),
 
@@ -72,7 +73,8 @@ server = function(input, output, session) {
     })
   # Retrieve dataframe fields (columns) for the UI selectInput
   observeEvent(input$upload,
-               updateSelectInput(inputId = 'fields', choices = colnames(server_xml_to_dataframe()))
+               updateSelectInput(inputId = 'fields', choices = colnames(server_xml_to_dataframe()),
+                                 selected = c('Composer', 'Orchestra', 'Genre', 'Work', 'Year Recorded', 'Album'))
   )
   server_filter_dataframe = reactive({
     # Wait for column selection
@@ -82,7 +84,7 @@ server = function(input, output, session) {
   })
 
   # Render
-  output$dataframe = renderTable(server_filter_dataframe())
+  output$dataframe = DT::renderDataTable(server_filter_dataframe())
 
   # Reset choice of fields
   observeEvent(input$reset, {

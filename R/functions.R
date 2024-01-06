@@ -11,6 +11,11 @@ library(xml2)
 # Convert from XML to dataframe
 # Each track is stored as an "Item" with numerous Fields, and not all tracks
 # contain the same fields. Allow user to specify which fields to retain
+# All tracks are expected to contain:
+# Composer Album Orchestra Genre Work Year Recorded
+# Use these as defaults
+# Some tracks may contain:
+# Conductor	Soloists
 
 # Extract fields and values for each item
 extract_tags = function(item) {
