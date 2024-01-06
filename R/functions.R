@@ -42,7 +42,8 @@ filter_dataframe = function(dataframe, columns_to_retain) {
     dplyr::distinct()
 }
 
-# Test code
+# Informal test code
+# tag_df should have 799 obs. of 5 variables
 file = 'test/library.xml'
 columns_to_retain = c('Genre', 'Composer', 'Work', 'Orchestra', 'Year Recorded')
 tag_df = xml_to_dataframe(file)
