@@ -4,6 +4,8 @@
 ### Email: joshamilton@gmail.com
 ################################################################################
 
+library(ggplot2)
+theme_set(theme_minimal())
 library(magrittr)
 library(xml2)
 
@@ -13,9 +15,9 @@ library(xml2)
 # contain the same fields. Allow user to specify which fields to retain
 # All tracks are expected to contain:
 # Composer Album Orchestra Genre Work Year Recorded
-# Use these as defaults
 # Some tracks may contain:
 # Conductor	Soloists
+# Use these as defaults
 
 # Extract fields and values for each item
 extract_tags = function(item) {
@@ -47,9 +49,54 @@ filter_dataframe = function(dataframe, columns_to_retain) {
     dplyr::distinct()
 }
 
-# Informal test code
-# tag_df should have 799 obs. of 5 variables
+filter_dataframe_by_field = function(dataframe, field) {
+  tidy_tag_df %>% dplyr::filter(Field == field) %>% dplyr::select(Value)
+}
+
+# Convert the tag_df to tidy (long) format
+make_long_tag_df = function(tag_df) {
+  tidy_tag_df = tag_df %>%
+    tidyr:: pivot_longer(cols = everything(), names_to = 'Field', values_to = 'Value') %>%
+    dplyr::distinct() %>%
+    dplyr::mutate(Field = as.factor(Field))
+}
+
+# Plot tag uniqueness
+plot_tag_uniqueness = function(tag_df) {
+  tidy_tag_df = make_long_tag_df(tag_df)
+  ggplot(tidy_tag_df, aes(x = Field)) +
+    geom_bar(stat = 'count') +
+    geom_label(aes(label = after_stat(count)), stat = 'count') +
+    labs(title = 'Composition of Music Library', x = 'Field', y = 'Unique Values')
+}
+
+# # Informal test code: Dataframe Processing
+#
+# # tag_df should have 799 obs. of 5 variables
 # file = 'test/library.xml'
-# columns_to_retain = c('Genre', 'Composer', 'Work', 'Orchestra', 'Year Recorded')
+# columns_to_retain = c('Genre', 'Composer', 'Work', 'Orchestra', 'Year Recorded', 'Album', 'Conductor', 'Soloists')
 # tag_df = xml_to_dataframe(file)
 # tag_df = filter_dataframe(tag_df, columns_to_retain)
+
+# # Informal test code: Tag uniqueness
+# plot_tag_uniqueness(tag_df)
+# tidy_tag_df = make_long_tag_df(tag_df)
+# ggplot(tidy_tag_df, aes(x = Field)) +
+#   geom_bar(stat = 'count') +
+#   geom_label(aes(label = after_stat(count)), stat = 'count') +
+#   labs(title = 'Composition of Music Library', x = 'Field', y = 'Unique Values')
+
+# # Informal test code: Tag completeness
+# # A work should have either an orchestra or a soloist. If user requests both, then also compute the optional field
+# if (('Orchestra' %in% columns_to_retain) &  ('Soloists' %in% columns_to_retain)) {
+# tag_fraction_df = tag_df %>%
+#   dplyr::mutate(`Orchestra or Soloist` = ifelse(!is.na(Orchestra) | !is.na(Soloists), 1, 0)) %>%
+#   dplyr::summarize(across(everything(), ~ sum(!is.na(.)) / dplyr::n(), .names = '{.col}'))
+# } else {
+#   tag_fraction_df = tag_df %>%
+#     dplyr::summarize(across(everything(), ~ sum(!is.na(.)) / dplyr::n(), .names = '{.col}'))
+# }
+# tidy_fraction_tag_df = make_long_tag_df(tag_fraction_df)
+# ggplot(tidy_fraction_tag_df, aes(x = Field, y = Value)) +
+#   geom_bar(stat = 'identity') +
+#   labs(title = 'Fraction of Items with Tag', x = 'Field', y = 'Unique Values')

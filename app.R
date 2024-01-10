@@ -20,7 +20,7 @@ source('R/functions.R')
 
 ui = fluidPage(
 
-  navbarPage('Explore the JRiver Media Center Library'),
+  titlePanel('Explore the JRiver Media Center Library'),
 
   tabsetPanel(
 
@@ -47,11 +47,28 @@ ui = fluidPage(
       # Main panel
       mainPanel(
         # Output: dataframe generated from XML file
+        h4('Selected Fields'),
         DT::dataTableOutput(outputId = 'dataframe')
       ),
     ),
 
-    tabPanel('Tag Summary'),
+    tabPanel('Tagging QC',
+             sidebarPanel('Visit the "Library Import and Export" tab to upload your library and select fields to visualize'),
+
+             mainPanel(
+               # Composition of Music Library
+               fluidRow(h4('Uniqueness of Music Library'),
+                        p('Click on a bar to view the values of the unique items'),
+                        plotOutput('uniqueness_plot',
+                                   click = 'uniqueness_plot_click'),
+                        p('The selected field was ', textOutput('click_field')),
+                        DT::dataTableOutput(outputId = 'uniqueness_table')
+                        ),
+               # Completeness of Music Library
+               fluidRow(h4('Completeness of Music Library'),
+                        )
+               )
+             ),
 
     tabPanel('Visualizations'),
   )
@@ -59,6 +76,7 @@ ui = fluidPage(
 
 server = function(input, output, session) {
 
+  ### Library Import and Export
   # Generate dataframe from selected XML file
   server_xml_to_dataframe = reactive({
     # wait for file upload
@@ -74,11 +92,9 @@ server = function(input, output, session) {
   # Retrieve dataframe fields (columns) for the UI selectInput
   observeEvent(input$upload,
                updateSelectInput(inputId = 'fields', choices = colnames(server_xml_to_dataframe()),
-                                 selected = c('Composer', 'Orchestra', 'Genre', 'Work', 'Year Recorded', 'Album'))
+                                 selected = c('Composer', 'Orchestra', 'Genre', 'Work', 'Year Recorded', 'Album', 'Conductor', 'Soloists'))
   )
   server_filter_dataframe = reactive({
-    # Wait for column selection
-    req(input$fields)
     # Filter
     filter_dataframe(server_xml_to_dataframe(), input$fields)
   })
@@ -99,6 +115,33 @@ server = function(input, output, session) {
     }
   )
 
+  ### Tagging QC
+  ### Barchart
+  output$uniqueness_plot = renderPlot({
+    plot_tag_uniqueness(
+      server_filter_dataframe())
+      })
+
+  ### Determine the field based on the x position of the click
+  output$click_field = renderPrint({
+#    if (is.null(input$uniqueness_plot_click$x)) return()
+    req(input$uniqueness_plot_click)
+    field_values = levels(make_long_tag_df(server_filter_dataframe())$Field)
+    field_values[round(input$uniqueness_plot_click$x)]
+  })
+  ### Print the unique values for the selected bar
+  server_uniqueness_table = reactive({
+    # Wait for column selection
+    req(input$uniqueness_plot_click)
+    # Filter based on user-specified frame
+    field_values = levels(make_long_tag_df(server_filter_dataframe())$Field)
+    field = field_values[round(input$uniqueness_plot_click$x)]
+    make_long_tag_df(server_filter_dataframe()) %>% dplyr::filter(Field == field) %>% dplyr::select(Value)
+  })
+
+  output$uniqueness_table = DT::renderDataTable(
+    server_uniqueness_table()
+  )
 }
 
 shinyApp(ui, server)
