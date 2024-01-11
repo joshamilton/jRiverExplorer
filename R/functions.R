@@ -58,6 +58,7 @@ filter_dataframe_by_field = function(dataframe, field) {
 make_long_tag_df = function(tag_df) {
   tidy_tag_df = tag_df %>%
     tidyr:: pivot_longer(cols = everything(), names_to = 'Field', values_to = 'Value') %>%
+    dplyr::filter(!is.na(Value)) %>%
     dplyr::distinct() %>%
     dplyr::mutate(Field = as.factor(Field))
 }

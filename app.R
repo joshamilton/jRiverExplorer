@@ -185,7 +185,11 @@ server = function(input, output, session) {
     # Filter based on user-specified frame
     field_values = levels(make_long_tag_df(server_filter_dataframe())$Field)
     field = field_values[round(input$uniqueness_plot_click$x)]
-    make_long_tag_df(server_filter_dataframe()) %>% dplyr::filter(Field == field) %>% dplyr::select(Value)
+    make_long_tag_df(server_filter_dataframe()) %>%
+      dplyr::filter(Field == field) %>%
+      dplyr::filter(!is.na(Value)) %>%
+      dplyr::arrange(Value) %>%
+      dplyr::select(Value)
   })
 
   output$uniqueness_table = DT::renderDataTable(
