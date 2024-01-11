@@ -29,13 +29,13 @@ ui = fluidPage(
     # Right-hand side will display the entire dataframe
     tabPanel('Library Import and Export',
 
-      # Sidebar
+      ### Sidebar
       sidebarPanel(
         # Input: XML file
         fileInput(inputId = 'upload', label = 'Select JRiver Library XML file', buttonLabel = 'Upload'),
 
         # Select columns to include
-        selectInput(inputId = 'fields', label = 'Select fields to retain', multiple = TRUE, choices = NULL),
+        selectInput(inputId = 'fields', label = 'Select additional fields to retain', multiple = TRUE, choices = NULL),
 
         # Allow reset
         actionButton(inputId = 'reset', 'Reset'),
@@ -44,7 +44,7 @@ ui = fluidPage(
         downloadButton(outputId = 'download', label = 'Download as CSV')
         ),
 
-      # Main panel
+      ### Main panel
       mainPanel(
         # Output: dataframe generated from XML file
         h4('Selected Fields'),
@@ -52,25 +52,36 @@ ui = fluidPage(
       ),
     ),
 
+    # Inspect completeness of tags, and unique tag values
+    # For now, uses same options as previous tab
+    # Right-hand side has plots and reactive dataframes
     tabPanel('Tagging QC',
+             ### Sidebar
              sidebarPanel('Visit the "Library Import and Export" tab to upload your library and select fields to visualize'),
 
+             ### Main panel
              mainPanel(
-               # Composition of Music Library
-               fluidRow(h4('Uniqueness of Music Library'),
+               ### Completeness of Library Tagging
+               fluidRow(h4('Completeness of Library Tagging'),
+                        p('Click on a bar to view the values of the untagged items'),
+                        plotOutput('completeness_plot',
+                                   click = 'completeness_plot_click'),
+                        p('Items missing Tag ', textOutput('completeness_click_field')),
+                        DT::dataTableOutput(outputId = 'completeness_table')
+                        ),
+               ### Composition of Music Library
+               fluidRow(h4('Unique Tag Values within Music Library'),
                         p('Click on a bar to view the values of the unique items'),
                         plotOutput('uniqueness_plot',
                                    click = 'uniqueness_plot_click'),
-                        p('The selected field was ', textOutput('click_field')),
+                        p('Unique values for Tag ', textOutput('uniqueness_plot_click')),
                         DT::dataTableOutput(outputId = 'uniqueness_table')
                         ),
-               # Completeness of Music Library
-               fluidRow(h4('Completeness of Music Library'),
-                        )
+
                )
              ),
 
-    tabPanel('Visualizations'),
+    tabPanel('Distributions'),
   )
 )
 
@@ -104,7 +115,8 @@ server = function(input, output, session) {
 
   # Reset choice of fields
   observeEvent(input$reset, {
-    updateSelectInput(inputId = 'fields', choices = colnames(server_xml_to_dataframe()))
+    updateSelectInput(inputId = 'fields', choices = colnames(server_xml_to_dataframe()),
+                      selected = c('Composer', 'Orchestra', 'Genre', 'Work', 'Year Recorded', 'Album', 'Conductor', 'Soloists'))
   })
 
   # Download dataframe
@@ -115,21 +127,58 @@ server = function(input, output, session) {
     }
   )
 
-  ### Tagging QC
-  ### Barchart
+  ### Completeness of Library Tagging
+
+  ### Missing Tag Values
+  output$completeness_plot = renderPlot({
+    plot_tag_completeness(
+      server_filter_dataframe(), colnames(server_xml_to_dataframe()))
+  })
+
+  # Determine the field based on the x position of the click
+  output$completeness_click_field = renderPrint({
+    # Wait for column selection
+    req(input$completeness_plot_click)
+    # Filter based on user-specified frame
+    field_values = levels(make_long_tag_df(make_tag_completeness_df(server_filter_dataframe(), colnames(server_xml_to_dataframe())))$Field)
+    field_values[round(input$completeness_plot_click$x)]
+  })
+
+  ### YOU ARE HERE
+  ### Fails when user selects non-default columns
+  ### server_xml_to_dataframe returns the entire tag_df
+  ### Problem is with the filter_datarame function - for tag completeness, it may need to return a default set of columns for the output to make sense
+  # Print the untagged values for the selected bar
+  server_completeness_table = reactive({
+    # Wait for column selection
+    req(input$completeness_plot_click)
+    # Filter based on user-specified frame
+    field_values = levels(make_long_tag_df(make_tag_completeness_df(server_filter_dataframe(), colnames(server_xml_to_dataframe())))$Field)
+    field = field_values[round(input$completeness_plot_click$x)]
+    # Expand dataframe to include Orchestra and Soloists
+    tag_df = server_filter_dataframe() %>%
+      dplyr::mutate(`Orchestra or Soloist` = ifelse(!is.na(Orchestra) | !is.na(Soloists), 1, NA))
+    tag_df %>% dplyr::filter(is.na(.data[[field]]))
+  })
+
+  output$completeness_table = DT::renderDataTable(
+    server_completeness_table()
+  )
+
+  ### Unique Tag Values
   output$uniqueness_plot = renderPlot({
     plot_tag_uniqueness(
       server_filter_dataframe())
       })
 
-  ### Determine the field based on the x position of the click
-  output$click_field = renderPrint({
-#    if (is.null(input$uniqueness_plot_click$x)) return()
+  # Determine the field based on the x position of the click
+  output$uniqueness_click_field = renderPrint({
     req(input$uniqueness_plot_click)
     field_values = levels(make_long_tag_df(server_filter_dataframe())$Field)
     field_values[round(input$uniqueness_plot_click$x)]
   })
-  ### Print the unique values for the selected bar
+
+  # Print the unique values for the selected bar
   server_uniqueness_table = reactive({
     # Wait for column selection
     req(input$uniqueness_plot_click)
