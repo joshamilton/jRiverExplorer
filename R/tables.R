@@ -9,7 +9,6 @@ library(ggplot2)
 theme_set(theme_minimal())
 library(magrittr)
 library(xml2)
-source('R/utils.R')
 
 # Filter dataframe and simplify to contain unique entries
 filter_dataframe = function(dataframe,

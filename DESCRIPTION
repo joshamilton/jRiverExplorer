@@ -1,0 +1,19 @@
+Package: jRiverExplorer
+Title: Explore the JRiver Media Center Library
+Version: 0.0.0.9000
+Authors@R: 
+    person("Joshua", "Hamilton", , "joshamilton@gmail.com", role = c("aut", "cre"))
+Description: An R Shiny app designed to explore my personal JRiver Media Center 
+    Library. JRiver Media Center is a multimedia application that I use to 
+    organize my classical music collection. This app provides summary 
+    statistics and visualizations about the music in my collection.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.0
+Imports:
+    DT,
+    shiny,
+    ggplot2,
+    magrittr,
+    xml2
