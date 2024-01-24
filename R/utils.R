@@ -21,18 +21,18 @@ check_xml = function(name) {
 
 # Extract fields and values for each item
 extract_tags = function(item) {
-  cur_fields = xml_children(item)
-  cur_field_names = xml_attr(cur_fields, "Name")
-  cur_values = xml_text(cur_fields)
-  setNames(cur_values, cur_field_names)
+  cur_fields = xml2::xml_children(item)
+  cur_field_names = xml2::xml_attr(cur_fields, "Name")
+  cur_values = xml2::xml_text(cur_fields)
+  stats::setNames(cur_values, cur_field_names)
 }
 
 # Convert XML file to dataframe
 xml_to_dataframe = function(file) {
   # Read the XML file and find all Items and Fields
-  xml_file = read_xml(file)
-  items = xml_find_all(xml_file, "//Item")
-  all_field_names = unique(xml_find_all(xml_file, "//Item/Field") %>% xml_attr("Name"))
+  xml_file = xml2::read_xml(file)
+  items = xml2::xml_find_all(xml_file, "//Item")
+  all_field_names = unique(xml2::xml_find_all(xml_file, "//Item/Field") %>% xml2::xml_attr("Name"))
   # Create a dataframe
   tag_df = as.data.frame(matrix(nrow = length(items), ncol = length(all_field_names)))
   colnames(tag_df) = all_field_names

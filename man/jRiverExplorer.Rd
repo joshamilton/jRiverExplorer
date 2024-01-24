@@ -5,7 +5,7 @@
 \title{jRiverExplorer
 Wrapper function for Shiny app to explore JRiver Media Center Library}
 \usage{
-jRiverExplorer(...)
+jRiverExplorer()
 }
 \description{
 jRiverExplorer

@@ -12,8 +12,14 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.0
 Imports:
+    dplyr,
     DT,
+    scales,
     shiny,
     ggplot2,
     magrittr,
+    rlang,
+    stats,
+    tidyr,
+    utils,
     xml2

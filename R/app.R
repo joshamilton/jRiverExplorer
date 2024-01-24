@@ -4,13 +4,11 @@
 ### Email: joshamilton@gmail.com
 ################################################################################
 
-library(DT)
-library(shiny)
-
 #' jRiverExplorer
 #' Wrapper function for Shiny app to explore JRiver Media Center Library
+#' @import shiny
 #' @export
-jRiverExplorer = function(...) {
+jRiverExplorer = function() {
   # Two panes, LHS has options, RHS has visualizations
   # Use a tabPanel to construct separate visualizations
   # Tabs 1: data table showing entire dataframe
@@ -136,7 +134,7 @@ jRiverExplorer = function(...) {
     output$download = downloadHandler(
       filename = 'tags.csv',
       content = function(file) {
-        write.csv(server_filter_dataframe(), file, row.names = FALSE)
+        utils::write.csv(server_filter_dataframe(), file, row.names = FALSE)
       }
     )
 
@@ -184,5 +182,5 @@ jRiverExplorer = function(...) {
     )
   }
 
-  shinyApp(ui, server, ...)
+  shinyApp(ui, server)
 }
