@@ -24,7 +24,7 @@
 #' @examples
 #' check_xml('test/library.xml')
 check_xml = function(name) {
-  file_extension = tools::file_ext(name)
+  file_extension = tolower(tools::file_ext(name))
   if (file_extension != 'xml') {
     validate('Please upload an XML file')
   }
