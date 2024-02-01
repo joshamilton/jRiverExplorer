@@ -4,4 +4,5 @@
 .Ruserdata
 renv/library/
 renv/staging/
+tests/testthat/library.xml
 README.html

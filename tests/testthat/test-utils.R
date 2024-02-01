@@ -5,14 +5,27 @@
 ### Testing of helper functions for app.R
 ################################################################################
 
-# Test that check_xml returns an error when reading a non-XML file
-test_that('check_xml returns an error when reading a non-XML file',{
-  expect_error(check_xml('library.csv'), 'Please upload an XML file')
+# Test that check_xml returns the proper errors
+test_that('check_xml returns the proper errors',{
+  expect_error(check_xml(test_path('files', 'library.csv')), 'Please upload an XML file')
+
+  expect_error(check_xml(test_path('files', 'library-utils-negative-field-names.xml')),
+               'Not all <Field> tags have <Name> attributes. Please upload the correct file.')
+
+  expect_error(check_xml(test_path('files', 'library-utils-negative-fields.xml')),
+               'Not all <Item> tags have <Field> tags. Please upload the correct file.')
+
+  expect_error(check_xml(test_path('files', 'library-utils-negative-items.xml')),
+               'No <Item> tags found in the XML file. Please upload the correct file.')
+
+  expect_error(check_xml(test_path('files', 'library-utils-missing-fields.xml')),
+               'One or more mandatory fields are missing. Please upload the correct file.')
+
 })
 
 # Test that extract_tags returns a named vector with the proper names
 test_that('extract_tags returns a named vector with the proper names',{
-  item = xml2::read_xml('library-utils-positive.xml') %>% xml2::xml_find_all('//Item') %>% .[[1]]
+  item = xml2::read_xml(test_path('files', 'library-utils-positive.xml')) %>% xml2::xml_find_all('//Item') %>% .[[1]]
   expected_names = c('Name', 'Album', 'Genre', 'Track #', 'Disc #', 'Composer',
                      'Conductor', 'Orchestra', 'Work', 'Total Tracks', 'Total Discs',
                      'Year Recorded', 'Year Released', 'Year Written', 'Record Label')
@@ -21,7 +34,7 @@ test_that('extract_tags returns a named vector with the proper names',{
 
 # Test that extract_tags returns the proper values
 test_that('extract_tags returns a named vector with the proper values',{
-  item = xml2::read_xml('library-utils-positive.xml') %>% xml2::xml_find_all('//Item') %>% .[[1]]
+  item = xml2::read_xml(test_path('files', 'library-utils-positive.xml')) %>% xml2::xml_find_all('//Item') %>% .[[1]]
   expected_values = c('Canzon XVII', 'Music for Brass', 'Renaissance', '1', '1',
                       'Gabrieli, Giovanni', 'Crees, Eric',
                       'London Symphony Orchestra Brass', 'Canzon XVII', '43', '3',
@@ -29,9 +42,10 @@ test_that('extract_tags returns a named vector with the proper values',{
   expect_setequal(extract_tags(item), expected_values)
 })
 
-# Test that xml_to_dataframe returns the proper dataframe
+#' Test that xml_to_dataframe returns the proper dataframe
+#' @importFrom tibble as tibble
 test_that('extract_tags returns a named vector with the proper values',{
-  tag_df = xml_to_dataframe('library-utils-positive.xml')
+  tag_df = xml_to_dataframe(test_path('files', 'library-utils-positive.xml'))
   expected_tibble = tibble::tibble(
     Name = c('Canzon XVII', 'String Quintet No 1 in B-flat, K 174 - I. Allegro moderato'),
     Album = c('Music for Brass', 'The String Quintets'),

@@ -17,7 +17,7 @@ Extract fields and values for each item
 }
 \examples{
 \dontrun{
-item = xml2::read_xml('test/library.xml') \%>\% xml2::xml_find_all("//Item") \%>\% .[[1]]
+item = xml2::read_xml('test/library.xml') \%>\% xml2::xml_find_all('//Item') \%>\% .[[1]]
 extract_tags(item)
 }
 }

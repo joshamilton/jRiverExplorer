@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<MPL Version="2.0" Title="Library" PathSeparator="/">
+<Item>
+<Field id="Name">Canzon XVII</Field>
+<Field id="Album">Music for Brass</Field>
+<Field id="Genre">Renaissance</Field>
+<Field id="Track #">1</Field>
+<Field id="Disc #">1</Field>
+<Field id="Composer">Gabrieli, Giovanni</Field>
+<Field id="Conductor">Crees, Eric</Field>
+<Field id="Orchestra">London Symphony Orchestra Brass</Field>
+<Field id="Work">Canzon XVII</Field>
+<Field id="Total Tracks">43</Field>
+<Field id="Total Discs">3</Field>
+<Field id="Year Recorded">1996</Field>
+<Field id="Year Released">1997</Field>
+<Field id="Year Written">1615</Field>
+<Field id="Record Label">Naxos</Field>
+</Item>
+<Item>
+<Field id="Name">String Quintet No 1 in B-flat, K 174 - I. Allegro moderato</Field>
+<Field id="Album">The String Quintets</Field>
+<Field id="Genre">Classical</Field>
+<Field id="Track #">1</Field>
+<Field id="Disc #">1</Field>
+<Field id="Catalog #">K 174</Field>
+<Field id="Composer">Mozart, Wolfgang Amadeus</Field>
+<Field id="Orchestra">Amadeus Quartet</Field>
+<Field id="Soloists">Aronowitz, Cecil</Field>
+<Field id="Work">String Quintet No 1</Field>
+<Field id="Movement">I. Allegro moderato</Field>
+<Field id="Total Tracks">25</Field>
+<Field id="Total Discs">3</Field>
+<Field id="Initial Key">B-flat</Field>
+<Field id="Year Recorded">1974</Field>
+</Item>
+</MPL>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<MPL Version="2.0" Title="Library" PathSeparator="/">
+<Item>
+<Field Name="Name">Canzon XVII</Field>
+<Field Name="Album">Music for Brass</Field>
+<Field Name="Genre">Renaissance</Field>
+<Field Name="Track #">1</Field>
+<Field Name="Disc #">1</Field>
+<Field Name="Composer">Gabrieli, Giovanni</Field>
+<Field Name="Conductor">Crees, Eric</Field>
+<Field Name="Work">Canzon XVII</Field>
+<Field Name="Total Tracks">43</Field>
+<Field Name="Total Discs">3</Field>
+<Field Name="Year Recorded">1996</Field>
+<Field Name="Year Released">1997</Field>
+<Field Name="Year Written">1615</Field>
+<Field Name="Record Label">Naxos</Field>
+</Item>
+<Item>
+<Field Name="Name">String Quintet No 1 in B-flat, K 174 - I. Allegro moderato</Field>
+<Field Name="Album">The String Quintets</Field>
+<Field Name="Genre">Classical</Field>
+<Field Name="Track #">1</Field>
+<Field Name="Disc #">1</Field>
+<Field Name="Catalog #">K 174</Field>
+<Field Name="Composer">Mozart, Wolfgang Amadeus</Field>
+<Field Name="Work">String Quintet No 1</Field>
+<Field Name="Movement">I. Allegro moderato</Field>
+<Field Name="Total Tracks">25</Field>
+<Field Name="Total Discs">3</Field>
+<Field Name="Initial Key">B-flat</Field>
+<Field Name="Year Recorded">1974</Field>
+</Item>
+</MPL>

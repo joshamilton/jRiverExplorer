@@ -12,9 +12,6 @@ library(jRiverExplorer)
 test_check("jRiverExplorer")
 
 # Thoughts on test library.xml files
-# For the positive test, two entries: one with a soloist, one with an orchestra
-# For the negative test, one entry with one or more required fields missing
-# Both tests should contain optional and required fields
 # For testing the tables and plots functions, use the complete library.xml file
 #  modified to remove 'Gustav Leonhardt' as a soloist, so the 'Orchestra or
 #  Soloist' condition can be checked

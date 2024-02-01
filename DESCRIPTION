@@ -20,10 +20,10 @@ Imports:
     magrittr,
     rlang,
     stats,
-    tibble,
     tidyr,
     utils,
     xml2
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0), 
+    tibble
 Config/testthat/edition: 3
