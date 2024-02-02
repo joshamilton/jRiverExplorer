@@ -30,3 +30,7 @@ devtools::install_github("joshamilton/jRiverExplorer")
 ``` r
 jRiverExplorer::jRiverExplorer()
 ```
+
+An example JRiver Media Library XML file is included in this package:
+`tests/testthat/files/library.xml`. Users can upload this file into the
+app to explore its features.
