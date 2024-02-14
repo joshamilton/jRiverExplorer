@@ -23,9 +23,10 @@ Validate the XML file has the expected \if{html}{\out{<Field>}} 'Names':
 'Conductor', 'Soloists'
 }
 \examples{
+file = system.file('extdata', 'library.xml', package = 'jRiverExplorer')
+check_xml(file)
 \dontrun{
 check_xml('tests/testthat/library.csv')
-check_xml('tests/testthat/library.xml')
 check_xml('tests/testthat/library-utils-negative-items.xml')
 check_xml('tests/testthat/library-utils-negative-fields.xml')
 check_xml('tests/testthat/library-utils-negative-field-names.xml')

@@ -18,7 +18,6 @@ values will be the field values.
 Convert XML file to dataframe
 }
 \examples{
-\dontrun{
-xml_to_dataframe('test/library.xml')
-}
+file = system.file('extdata', 'library.xml', package = 'jRiverExplorer')
+xml_to_dataframe(file)
 }

@@ -16,8 +16,7 @@ A named vector containing the fields and values for the item
 Extract fields and values for each item
 }
 \examples{
-\dontrun{
-item = xml2::read_xml('test/library.xml') \%>\% xml2::xml_find_all('//Item') \%>\% .[[1]]
+file = system.file('extdata', 'library.xml', package = 'jRiverExplorer')
+item = xml2::read_xml(file) \%>\% xml2::xml_find_all('//Item') \%>\% .[[1]]
 extract_tags(item)
-}
 }

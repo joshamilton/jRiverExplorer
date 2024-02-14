@@ -23,9 +23,10 @@
 #' @export
 #'
 #' @examples
+#' file = system.file('extdata', 'library.xml', package = 'jRiverExplorer')
+#' check_xml(file)
 #' \dontrun{
 #' check_xml('tests/testthat/library.csv')
-#' check_xml('tests/testthat/library.xml')
 #' check_xml('tests/testthat/library-utils-negative-items.xml')
 #' check_xml('tests/testthat/library-utils-negative-fields.xml')
 #' check_xml('tests/testthat/library-utils-negative-field-names.xml')
@@ -88,10 +89,9 @@ check_xml = function(file) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' item = xml2::read_xml('test/library.xml') %>% xml2::xml_find_all('//Item') %>% .[[1]]
+#' file = system.file('extdata', 'library.xml', package = 'jRiverExplorer')
+#' item = xml2::read_xml(file) %>% xml2::xml_find_all('//Item') %>% .[[1]]
 #' extract_tags(item)
-#' }
 extract_tags = function(item) {
   cur_fields = xml2::xml_children(item)
   cur_field_names = xml2::xml_attr(cur_fields, 'Name')
@@ -109,9 +109,8 @@ extract_tags = function(item) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' xml_to_dataframe('test/library.xml')
-#' }
+#' file = system.file('extdata', 'library.xml', package = 'jRiverExplorer')
+#' xml_to_dataframe(file)
 xml_to_dataframe = function(file) {
   # Read the XML file and find all Items and Fields
   xml_file = xml2::read_xml(file)
