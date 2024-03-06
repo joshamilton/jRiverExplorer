@@ -2,8 +2,11 @@
 
 export("%>%")
 export(check_xml)
+export(expand_df)
 export(extract_tags)
+export(filter_dataframe)
 export(jRiverExplorer)
+export(make_long_tag_df)
 export(xml_to_dataframe)
 import(shiny)
 importFrom(magrittr,"%>%")

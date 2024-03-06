@@ -155,7 +155,6 @@ jRiverExplorer = function() {
       tag_df = expand_df(server_filter_dataframe())
       # Filter to only include untagged values
       select_untagged_values(tag_df, field)
-  #    tag_df %>% dplyr::filter(is.na(.data[[field]]))
     })
     # Display the untagged values for the selected bar
     output$completeness_table = DT::renderDataTable(
